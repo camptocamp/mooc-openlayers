@@ -13,15 +13,14 @@ let basemapLayer = new TileLayer({
 
 let overviewLayer = new TileLayer({
   source: new OSM({
-    url : "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-    attributionsCollapsible: true
+    url : "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
   })
 })
 
 let overviewMapControl = new OverviewMap({
   layers: [
     overviewLayer
-   ],
+  ],
 });
 
 const map = new Map({
