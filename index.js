@@ -7,7 +7,6 @@ import {OverviewMap, ZoomToExtent, defaults as defaultControls} from 'ol/control
 let basemapLayer = new TileLayer({
   source: new OSM({
     url : "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-    attributionsCollapsible: true
   })
 })
 
