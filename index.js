@@ -20,7 +20,7 @@ let overviewLayer = new TileLayer({
 let wmsLayer = new TileLayer({
   source: new TileWMS({
     url: 'https://sedac.ciesin.columbia.edu/geoserver/wms',
-    params: {'LAYERS': 'ndh:ndh-earthquake-distribution-peak-ground-acceleration', 'TILED': true},
+    params: {'LAYERS': 'ndh:ndh-earthquake-frequency-distribution', 'TILED': true},
     transition: 0,
   }),
 })
