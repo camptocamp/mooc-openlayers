@@ -8,6 +8,8 @@ var overviewMapControl = new OverviewMap({
   layers: [
     new TileLayer({
       source: new OSM(),
+      url : "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+      attributionsCollapsible: true
     }) ],
 });
 
@@ -15,7 +17,9 @@ const map = new Map({
   target: 'map',
   layers: [
     new TileLayer({
-      source: new OSM()
+      source: new OSM(),
+      url : "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+      attributionsCollapsible: true
     })
   ],
   view: new View({
