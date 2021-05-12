@@ -25,6 +25,13 @@ let wmsLayer = new TileLayer({
   }),
 })
 
+let earthquakeLayer = new VectorLayer({
+  source: new VectorSource({
+    format: new GeoJSON(),
+    url: 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson',
+  })
+})
+
 let overviewMapControl = new OverviewMap({
   className: 'ol-overviewmap ol-custom-overviewmap',
   layers: [
@@ -57,7 +64,8 @@ const map = new Map({
   target: 'map',
   layers: [
     basemapLayer,
-    wmsLayer
+    wmsLayer,
+    earthquakeLayer
   ],
   view: new View({
     center: [0, 0],
