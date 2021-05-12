@@ -2,7 +2,7 @@ import 'ol/ol.css';
 import {Map, View} from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
-import {OverviewMap, defaults as defaultControls} from 'ol/control';
+import {OverviewMap, ZoomToExtent, defaults as defaultControls} from 'ol/control';
 
 let basemapLayer = new TileLayer({
   source: new OSM({
@@ -23,6 +23,10 @@ let overviewMapControl = new OverviewMap({
   ],
 });
 
+let zoomToExtentControl = new ZoomToExtent({
+  extent: [813079.8, 5929220.3, 848967.0, 5936864.0],
+})
+
 const map = new Map({
   target: 'map',
   layers: [
@@ -33,6 +37,7 @@ const map = new Map({
     zoom: 0,
   }),
   controls: defaultControls().extend([
-    overviewMapControl
+    overviewMapControl,
+    zoomToExtentControl
   ])
 })
