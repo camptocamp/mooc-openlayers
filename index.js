@@ -2,6 +2,7 @@ import 'ol/ol.css';
 import {Map, View} from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
+import TileWMS from 'ol/source/TileWMS';
 import {Attribution, ScaleLine, OverviewMap, ZoomToExtent, defaults as defaultControls} from 'ol/control';
 
 let basemapLayer = new TileLayer({
@@ -14,6 +15,14 @@ let overviewLayer = new TileLayer({
   source: new OSM({
     url : "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
   })
+})
+
+let wmsLayer = new TileLayer({
+  source: new TileWMS({
+    url: 'https://sedac.ciesin.columbia.edu/geoserver/wms',
+    params: {'LAYERS': 'ndh:ndh-earthquake-distribution-peak-ground-acceleration', 'TILED': true},
+    transition: 0,
+  }),
 })
 
 let overviewMapControl = new OverviewMap({
@@ -47,7 +56,8 @@ function scaleControl() {
 const map = new Map({
   target: 'map',
   layers: [
-    basemapLayer
+    basemapLayer,
+    wmsLayer
   ],
   view: new View({
     center: [0, 0],
