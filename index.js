@@ -8,6 +8,18 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import {Circle, Fill, Stroke, Style, Text} from 'ol/style';
 import {Attribution, ScaleLine, OverviewMap, ZoomToExtent, defaults as defaultControls} from 'ol/control';
+import Overlay from 'ol/Overlay';
+
+let container = document.getElementById('popup');
+let content = document.getElementById('popup-content');
+
+let overlay = new Overlay({
+  element: container,
+  autoPan: true,
+  autoPanAnimation: {
+    duration: 250,
+  },
+});
 
 let basemapLayer = new TileLayer({
   source: new OSM({
@@ -104,6 +116,9 @@ const map = new Map({
     wmsLayer,
     earthquakeLayer
   ],
+  overlays: [
+    overlay
+  ],
   view: new View({
     center: [0, 0],
     zoom: 0,
@@ -114,3 +129,25 @@ const map = new Map({
     scaleControl()
   ])
 })
+
+let selected = null;
+
+map.on('pointermove', function(e) {
+  let coordinate = e.coordinate;
+  if (selected !== null) {
+    selected.setStyle(undefined);
+    selected = null;
+  }
+  map.forEachFeatureAtPixel(e.pixel, function(f) {
+    selected = f;
+    return true;
+  });
+  if (selected) {
+    overlay.setPosition(coordinate);
+    content.innerHTML = '<table><tr><td>Magnitude:</td><td>' + selected.get('mag') + '</td></tr>' +
+                        '<tr><td>Location:</td><td>' + selected.get('place') + '</td></tr>' +
+                        '<tr><td>Depth:</td><td>' + selected.get('depth') + '</td></tr></table>'
+  } else {
+    overlay.setPosition(undefined);
+  }
+});
