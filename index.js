@@ -10,11 +10,11 @@ import {Circle, Fill, Stroke, Style, Text} from 'ol/style';
 import {Attribution, ScaleLine, OverviewMap, ZoomToExtent, defaults as defaultControls} from 'ol/control';
 import Overlay from 'ol/Overlay';
 
-let container = document.getElementById('popup');
-let content = document.getElementById('popup-content');
+let popupContainer = document.getElementById('popup');
+let popupContent = document.getElementById('popup-content');
 
 let overlay = new Overlay({
-  element: container,
+  element: popupContainer,
   autoPan: true,
   autoPanAnimation: {
     duration: 250,
@@ -144,9 +144,9 @@ map.on('pointermove', function(e) {
   });
   if (selected) {
     overlay.setPosition(coordinate);
-    content.innerHTML = '<table><tr><td>Magnitude:</td><td>' + selected.get('mag') + '</td></tr>' +
-                        '<tr><td>Location:</td><td>' + selected.get('place') + '</td></tr>' +
-                        '<tr><td>Depth:</td><td>' + selected.get('depth') + '</td></tr></table>'
+    popupContent.innerHTML = '<table><tr><td>Magnitude:</td><td>' + selected.get('mag') + '</td></tr>' +
+                             '<tr><td>Location:</td><td>' + selected.get('place') + '</td></tr>' +
+                             '<tr><td>Depth:</td><td>' + selected.get('depth') + '</td></tr></table>'
   } else {
     overlay.setPosition(undefined);
   }
