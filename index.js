@@ -35,10 +35,10 @@ let overviewMapControl = new OverviewMap({
 
 let zoomToExtentControl = new ZoomToExtent({
   extent: [
-    7112924,
-   -1271912,
-   22121487,
-    6545455
+    -15000000,
+    -24000000,
+     15000000,
+     29000000
   ],
 })
 
