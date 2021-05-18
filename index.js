@@ -9,14 +9,6 @@ import VectorSource from 'ol/source/Vector';
 import {Circle, Fill, Stroke, Style, Text} from 'ol/style';
 import {Attribution, ScaleLine, OverviewMap, ZoomToExtent, defaults as defaultControls} from 'ol/control';
 import Overlay from 'ol/Overlay';
-import proj4 from 'proj4';
-import {register} from 'ol/proj/proj4';
-import {get as getProjection} from 'ol/proj';
-
-proj4.defs('EPSG:4087',
-  '+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +units=m');
-register(proj4);
-const myProjection = getProjection('EPSG:4087');
 
 
 let popupContainer = document.getElementById('popup');
@@ -129,7 +121,6 @@ const map = new Map({
     overlay
   ],
   view: new View({
-    projection: myProjection,
     center: [0, 0],
     zoom: 0,
   }),
