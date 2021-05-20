@@ -9,6 +9,8 @@ import VectorSource from 'ol/source/Vector';
 import {Circle, Fill, Stroke, Style, Text} from 'ol/style';
 import {Attribution, ScaleLine, OverviewMap, ZoomToExtent, defaults as defaultControls} from 'ol/control';
 import Overlay from 'ol/Overlay';
+import Geolocation from 'ol/Geolocation';
+
 
 let popupContainer = document.getElementById('popup');
 let popupContent = document.getElementById('popup-content');
@@ -40,6 +42,36 @@ let wmsLayer = new TileLayer({
     transition: 0,
   }),
 })
+
+let accuracyFeature = new Feature();
+geolocation.on('change:accuracyGeometry', function () {
+  accuracyFeature.setGeometry(geolocation.getAccuracyGeometry());
+});
+
+let positionFeature = new Feature();
+positionFeature.setStyle(
+  new Style({
+    image: new CircleStyle({
+      radius: 6,
+      fill: new Fill({
+        color: '#3399CC',
+      }),
+      stroke: new Stroke({
+        color: '#fff',
+        width: 2,
+      }),
+    }),
+  })
+);
+
+let locationLayer = new VectorLayer({
+  source: new VectorSource({
+    features: [
+      accuracyFeature,
+      positionFeature
+    ],
+  }),
+});
 
 let earthquakeStyleLabel = new Style({
   image: new Circle({
@@ -114,7 +146,8 @@ const map = new Map({
   layers: [
     basemapLayer,
     wmsLayer,
-    earthquakeLayer
+    earthquakeLayer,
+    locationLayer
   ],
   overlays: [
     overlay
@@ -153,14 +186,39 @@ map.on('pointermove', function(e) {
   map.getTargetElement().style.cursor = selected ? 'pointer' : '';
 });
 
-map.on('singleclick', function(evt) {
-  document.getElementById('info').innerHTML = '';
-  var viewResolution = /** @type {number} */ (view.getResolution());
-  var url = wmsSource.getGetFeatureInfoUrl(
-      evt.coordinate, viewResolution, 'EPSG:3857',
-      {'INFO_FORMAT': 'text/html'});
-  if (url) {
-    document.getElementById('info').innerHTML =
-        '<iframe seamless src="' + url + '"></iframe>';
-  }
+let geolocation = new Geolocation({
+  trackingOptions: {
+    enableHighAccuracy: true,
+  },
+  projection: view.getProjection(),
+});
+
+function el(id) {
+  return document.getElementById(id);
+}
+
+el('track').addEventListener('change', function () {
+  geolocation.setTracking(this.checked);
+});
+
+geolocation.on('change', function () {
+  el('position').innerText = geolocation.getPosition() + ' [m]';
+  el('accuracy').innerText = geolocation.getAccuracy() + ' [m]';
+  el('altitude').innerText = geolocation.getAltitude() + ' [m]';
+  el('altitudeAccuracy').innerText = geolocation.getAltitudeAccuracy() + ' [m]';
+  el('heading').innerText = geolocation.getHeading() + ' [rad]';
+  el('speed').innerText = geolocation.getSpeed() + ' [m/s]';
+});
+
+geolocation.on('error', function (error) {
+  let info = document.getElementById('info');
+  info.innerHTML = error.message;
+  info.style.display = '';
+});
+
+
+geolocation.on('change:position', function () {
+  let coordinates = geolocation.getPosition();
+  positionFeature.setGeometry(coordinates ? new Point(coordinates) : null);
+  map.getView().setCenter(coordinates);
 });
