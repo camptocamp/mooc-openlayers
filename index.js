@@ -9,6 +9,15 @@ import VectorSource from 'ol/source/Vector';
 import {Circle, Fill, Stroke, Style, Text} from 'ol/style';
 import {Attribution, ScaleLine, OverviewMap, ZoomToExtent, defaults as defaultControls} from 'ol/control';
 import Overlay from 'ol/Overlay';
+import Geolocation from 'ol/Geolocation';
+import Feature from 'ol/Feature';
+import Point from 'ol/geom/Point';
+
+
+
+
+
+
 
 let popupContainer = document.getElementById('popup');
 let popupContent = document.getElementById('popup-content');
@@ -150,4 +159,72 @@ map.on('pointermove', function(e) {
   } else {
     overlay.setPosition(undefined);
   }
+});
+
+
+let geolocation = new Geolocation({
+  trackingOptions: {
+    enableHighAccuracy: true,
+  },
+  projection: view.getProjection(),
+});
+
+function el(id) {
+  return document.getElementById(id);
+}
+
+el('track').addEventListener('change', function () {
+  geolocation.setTracking(this.checked);
+});
+
+geolocation.on('change', function () {
+  el('position').innerText = geolocation.getPosition() + ' [m]';
+  el('accuracy').innerText = geolocation.getAccuracy() + ' [m]';
+  el('altitude').innerText = geolocation.getAltitude() + ' [m]';
+  el('altitudeAccuracy').innerText = geolocation.getAltitudeAccuracy() + ' [m]';
+  el('heading').innerText = geolocation.getHeading() + ' [rad]';
+  el('speed').innerText = geolocation.getSpeed() + ' [m/s]';
+});
+
+geolocation.on('error', function (error) {
+  let info = document.getElementById('info');
+  info.innerHTML = error.message;
+  info.style.display = '';
+});
+
+geolocation.on('change:position', function () {
+  let coordinates = geolocation.getPosition();
+  positionFeature.setGeometry(coordinates ? new Point(coordinates) : null);
+  map.getView().setCenter(coordinates);
+});
+
+
+let accuracyFeature = new Feature();
+geolocation.on('change:accuracyGeometry', function () {
+  accuracyFeature.setGeometry(geolocation.getAccuracyGeometry());
+});
+
+let positionFeature = new Feature();
+positionFeature.setStyle(
+  new Style({
+    image: new Circle({
+      radius: 6,
+      fill: new Fill({
+        color: '#3399CC',
+      }),
+      stroke: new Stroke({
+        color: '#fff',
+        width: 2,
+      }),
+    }),
+  })
+);
+
+let locationLayer = new VectorLayer({
+  source: new VectorSource({
+    features: [
+      accuracyFeature,
+      positionFeature
+    ],
+  }),
 });
