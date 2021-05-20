@@ -1,16 +1,14 @@
 import 'ol/ol.css';
 import {Map, View} from 'ol';
+import TileLayer from 'ol/layer/Tile';
+import OSM from 'ol/source/OSM';
 import TileWMS from 'ol/source/TileWMS';
 import GeoJSON from 'ol/format/GeoJSON';
-import {CircleStyle as CircleStyleStyle, Fill, Stroke, Style, Text} from 'ol/style';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import {Circle, Fill, Stroke, Style, Text} from 'ol/style';
 import {Attribution, ScaleLine, OverviewMap, ZoomToExtent, defaults as defaultControls} from 'ol/control';
 import Overlay from 'ol/Overlay';
-import Geolocation from 'ol/Geolocation';
-import Feature from 'ol/Feature';
-import Point from 'ol/geom/Point';
-import {OSM, Vector as VectorSource} from 'ol/source';
-import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
-
 
 let popupContainer = document.getElementById('popup');
 let popupContent = document.getElementById('popup-content');
@@ -43,38 +41,8 @@ let wmsLayer = new TileLayer({
   }),
 })
 
-let accuracyFeature = new Feature();
-geolocation.on('change:accuracyGeometry', function () {
-  accuracyFeature.setGeometry(geolocation.getAccuracyGeometry());
-});
-
-let positionFeature = new Feature();
-positionFeature.setStyle(
-  new Style({
-    image: new CircleStyle({
-      radius: 6,
-      fill: new Fill({
-        color: '#3399CC',
-      }),
-      stroke: new Stroke({
-        color: '#fff',
-        width: 2,
-      }),
-    }),
-  })
-);
-
-let locationLayer = new VectorLayer({
-  source: new VectorSource({
-    features: [
-      accuracyFeature,
-      positionFeature
-    ],
-  }),
-});
-
 let earthquakeStyleLabel = new Style({
-  image: new CircleStyle({
+  image: new Circle({
     fill: new Fill({color: 'rgba(0,0,0,0.4)'}),
     stroke: new Stroke({color: 'rgba(0,0,0,0.4)', width: 0.1})
   }),
@@ -86,7 +54,7 @@ let earthquakeStyleLabel = new Style({
 })
 
 let earthquakeStyleNoLabel = new Style({
-  image: new CircleStyle({
+  image: new Circle({
     fill: new Fill({color: 'rgba(0,0,0,0.4)'}),
     stroke: new Stroke({color: 'rgba(0,0,0,0.4)', width: 0.1})
   })
@@ -146,8 +114,7 @@ const map = new Map({
   layers: [
     basemapLayer,
     wmsLayer,
-    earthquakeLayer,
-    locationLayer
+    earthquakeLayer
   ],
   overlays: [
     overlay
@@ -183,41 +150,4 @@ map.on('pointermove', function(e) {
   } else {
     overlay.setPosition(undefined);
   }
-  map.getTargetElement().style.cursor = selected ? 'pointer' : '';
-});
-
-let geolocation = new Geolocation({
-  trackingOptions: {
-    enableHighAccuracy: true,
-  },
-  projection: view.getProjection(),
-});
-
-function el(id) {
-  return document.getElementById(id);
-}
-
-el('track').addEventListener('change', function () {
-  geolocation.setTracking(this.checked);
-});
-
-geolocation.on('change', function () {
-  el('position').innerText = geolocation.getPosition() + ' [m]';
-  el('accuracy').innerText = geolocation.getAccuracy() + ' [m]';
-  el('altitude').innerText = geolocation.getAltitude() + ' [m]';
-  el('altitudeAccuracy').innerText = geolocation.getAltitudeAccuracy() + ' [m]';
-  el('heading').innerText = geolocation.getHeading() + ' [rad]';
-  el('speed').innerText = geolocation.getSpeed() + ' [m/s]';
-});
-
-geolocation.on('error', function (error) {
-  let info = document.getElementById('info');
-  info.innerHTML = error.message;
-  info.style.display = '';
-});
-
-geolocation.on('change:position', function () {
-  let coordinates = geolocation.getPosition();
-  positionFeature.setGeometry(coordinates ? new Point(coordinates) : null);
-  map.getView().setCenter(coordinates);
 });
