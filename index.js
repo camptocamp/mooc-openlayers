@@ -1,15 +1,15 @@
 import 'ol/ol.css';
 import {Map, View} from 'ol';
-import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
 import TileWMS from 'ol/source/TileWMS';
 import GeoJSON from 'ol/format/GeoJSON';
-import VectorLayer from 'ol/layer/Vector';
-import VectorSource from 'ol/source/Vector';
-import {Circle, Fill, Stroke, Style, Text} from 'ol/style';
+import {CircleStyle as CircleStyleStyle, Fill, Stroke, Style, Text} from 'ol/style';
 import {Attribution, ScaleLine, OverviewMap, ZoomToExtent, defaults as defaultControls} from 'ol/control';
 import Overlay from 'ol/Overlay';
 import Geolocation from 'ol/Geolocation';
+import Feature from 'ol/Feature';
+import Point from 'ol/geom/Point';
+import {OSM, Vector as VectorSource} from 'ol/source';
+import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 
 
 let popupContainer = document.getElementById('popup');
@@ -74,7 +74,7 @@ let locationLayer = new VectorLayer({
 });
 
 let earthquakeStyleLabel = new Style({
-  image: new Circle({
+  image: new CircleStyle({
     fill: new Fill({color: 'rgba(0,0,0,0.4)'}),
     stroke: new Stroke({color: 'rgba(0,0,0,0.4)', width: 0.1})
   }),
@@ -86,7 +86,7 @@ let earthquakeStyleLabel = new Style({
 })
 
 let earthquakeStyleNoLabel = new Style({
-  image: new Circle({
+  image: new CircleStyle({
     fill: new Fill({color: 'rgba(0,0,0,0.4)'}),
     stroke: new Stroke({color: 'rgba(0,0,0,0.4)', width: 0.1})
   })
