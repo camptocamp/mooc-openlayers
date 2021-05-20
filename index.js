@@ -216,7 +216,6 @@ geolocation.on('error', function (error) {
   info.style.display = '';
 });
 
-
 geolocation.on('change:position', function () {
   let coordinates = geolocation.getPosition();
   positionFeature.setGeometry(coordinates ? new Point(coordinates) : null);

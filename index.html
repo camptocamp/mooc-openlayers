@@ -58,7 +58,19 @@
       <a href="#" id="popup-closer" class="ol-popup-closer"></a>
       <div id="popup-content"></div>
     </div>
-    <div id="info">&nbsp;</div>
+    <div id="info" style="display: none;"></div>
+    <label for="track">
+      Track position
+      <input id="track" type="checkbox"/>
+    </label>
+    <p>
+      position : <code id="position"></code>&nbsp;&nbsp;
+      position accuracy : <code id="accuracy"></code>&nbsp;&nbsp;
+      altitude : <code id="altitude"></code>&nbsp;&nbsp;
+      altitude accuracy : <code id="altitudeAccuracy"></code>&nbsp;&nbsp;
+      heading : <code id="heading"></code>&nbsp;&nbsp;
+      speed : <code id="speed"></code>
+    </p>
     <script src="./index.js"></script>
   </body>
 </html>
