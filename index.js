@@ -12,7 +12,7 @@ import Overlay from 'ol/Overlay';
 import Geolocation from 'ol/Geolocation';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
-import transform from 'ol/proj';
+import {transform} from 'ol/proj';
 
 let popupContainer = document.getElementById('popup');
 let popupContent = document.getElementById('popup-content');
@@ -123,6 +123,8 @@ let selected = null;
 
 map.on('click', function(e) {
   let coordinate = e.coordinate;
+  let lon = transform(geolocation.getPosition(), 'EPSG:3857', 'EPSG:4326')[0];
+  let lat = transform(geolocation.getPosition(), 'EPSG:3857', 'EPSG:4326')[1];
   if (selected) {
     selected = null;
   }
@@ -138,8 +140,8 @@ map.on('click', function(e) {
                                '<tr><td>Depth:</td><td>' + selected.get('depth') + '</td></tr></table>'
     } else {
       //let closestEartquake = vectorSource.getClosestFeatureToCoordinate(coordinate);
-      popupContent.innerHTML = '<table><tr><td>Lon:</td><td>' + geolocation.getPosition()[0] + '</td></tr>' +
-                               '<tr><td>Lat:</td><td>' + geolocation.getPosition()[1] + '</td></tr>' +
+      popupContent.innerHTML = '<table><tr><td>Lon:</td><td>' + lon + '</td></tr>' +
+                               '<tr><td>Lat:</td><td>' + lat + '</td></tr>' +
                                '<tr><td>Closest earthquake:</td><td>' + '' + '</td></tr></table>'
     }
   } else {
