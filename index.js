@@ -9,12 +9,9 @@ import VectorSource from 'ol/source/Vector';
 import {Circle, Fill, Stroke, Style, Text} from 'ol/style';
 import {Attribution, ScaleLine, OverviewMap, ZoomToExtent, defaults as defaultControls} from 'ol/control';
 import Overlay from 'ol/Overlay';
-
-import Feature from 'ol/Feature';
 import Geolocation from 'ol/Geolocation';
+import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
-
-
 
 let popupContainer = document.getElementById('popup');
 let popupContent = document.getElementById('popup-content');
@@ -23,7 +20,7 @@ let overlay = new Overlay({
   element: popupContainer,
   autoPan: true,
   autoPanAnimation: {
-    duration: 250,
+    duration: 200,
   },
 });
 
@@ -164,8 +161,6 @@ map.on('pointermove', function(e) {
     overlay.setPosition(undefined);
   }
 });
-
-
 
 var geolocation = new Geolocation({
   trackingOptions: {
