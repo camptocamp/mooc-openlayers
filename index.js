@@ -13,6 +13,7 @@ import Geolocation from 'ol/Geolocation';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
 import {transform} from 'ol/proj';
+import {getDistance} from 'ol/sphere';
 
 let popupContainer = document.getElementById('popup');
 let popupContent = document.getElementById('popup-content');
@@ -135,14 +136,14 @@ map.on('click', function(e) {
   if (selected) {
     overlay.setPosition(coordinate);
     if (typeof selected.get('mag') !== 'undefined') {
+      // Show earthquake info
       popupContent.innerHTML = '<table><tr><td>Magnitude:</td><td>' + selected.get('mag') + '</td></tr>' +
                                '<tr><td>Location:</td><td>' + selected.get('place') + '</td></tr>' +
                                '<tr><td>Depth:</td><td>' + selected.get('depth') + '</td></tr></table>'
     } else {
-      //let closestEartquake = vectorSource.getClosestFeatureToCoordinate(coordinate);
+      // Show geolocation info
       popupContent.innerHTML = '<table><tr><td>Lon:</td><td>' + lon + '</td></tr>' +
-                               '<tr><td>Lat:</td><td>' + lat + '</td></tr>' +
-                               '<tr><td>Closest earthquake:</td><td>' + '' + '</td></tr></table>'
+                               '<tr><td>Lat:</td><td>' + lat + '</td></tr></table>'
     }
   } else {
     // Do not show popup content
