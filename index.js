@@ -13,7 +13,6 @@ import Geolocation from 'ol/Geolocation';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
 import {transform} from 'ol/proj';
-import {getDistance} from 'ol/sphere';
 
 let popupContainer = document.getElementById('popup');
 let popupContent = document.getElementById('popup-content');
