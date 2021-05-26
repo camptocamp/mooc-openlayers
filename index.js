@@ -9,13 +9,10 @@ import VectorSource from 'ol/source/Vector';
 import {Circle, Fill, Stroke, Style, Text} from 'ol/style';
 import {Attribution, ScaleLine, OverviewMap, ZoomToExtent, defaults as defaultControls} from 'ol/control';
 import Overlay from 'ol/Overlay';
-import Geolocation from 'ol/Geolocation';
+
 import Feature from 'ol/Feature';
+import Geolocation from 'ol/Geolocation';
 import Point from 'ol/geom/Point';
-
-
-
-
 
 
 
@@ -143,7 +140,7 @@ let selected = null;
 
 map.on('pointermove', function(e) {
   let coordinate = e.coordinate;
-  if (selected !== null) {
+  if (selected) {
     selected.setStyle(undefined);
     selected = null;
   }
@@ -157,47 +154,20 @@ map.on('pointermove', function(e) {
                              '<tr><td>Location:</td><td>' + selected.get('place') + '</td></tr>' +
                              '<tr><td>Depth:</td><td>' + selected.get('depth') + '</td></tr></table>'
   } else {
+    // Do not show popup content
     overlay.setPosition(undefined);
   }
 });
 
 
-let geolocation = new Geolocation({
+
+var geolocation = new Geolocation({
   trackingOptions: {
     enableHighAccuracy: true,
   },
-  projection: view.getProjection(),
+  projection: map.getView().getProjection(),
 });
-
-function el(id) {
-  return document.getElementById(id);
-}
-
-el('track').addEventListener('change', function () {
-  geolocation.setTracking(this.checked);
-});
-
-geolocation.on('change', function () {
-  el('position').innerText = geolocation.getPosition() + ' [m]';
-  el('accuracy').innerText = geolocation.getAccuracy() + ' [m]';
-  el('altitude').innerText = geolocation.getAltitude() + ' [m]';
-  el('altitudeAccuracy').innerText = geolocation.getAltitudeAccuracy() + ' [m]';
-  el('heading').innerText = geolocation.getHeading() + ' [rad]';
-  el('speed').innerText = geolocation.getSpeed() + ' [m/s]';
-});
-
-geolocation.on('error', function (error) {
-  let info = document.getElementById('info');
-  info.innerHTML = error.message;
-  info.style.display = '';
-});
-
-geolocation.on('change:position', function () {
-  let coordinates = geolocation.getPosition();
-  positionFeature.setGeometry(coordinates ? new Point(coordinates) : null);
-  map.getView().setCenter(coordinates);
-});
-
+geolocation.setTracking(true);
 
 let accuracyFeature = new Feature();
 geolocation.on('change:accuracyGeometry', function () {
@@ -213,14 +183,20 @@ positionFeature.setStyle(
         color: '#3399CC',
       }),
       stroke: new Stroke({
-        color: '#fff',
+        color: '#FFFFFF',
         width: 2,
       }),
     }),
   })
 );
 
-let locationLayer = new VectorLayer({
+geolocation.on('change:position', function () {
+  let coordinates = geolocation.getPosition();
+  positionFeature.setGeometry(coordinates ? new Point(coordinates) : null);
+});
+
+new VectorLayer({
+  map: map,
   source: new VectorSource({
     features: [
       accuracyFeature,
