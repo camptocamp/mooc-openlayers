@@ -12,6 +12,7 @@ import Overlay from 'ol/Overlay';
 import Geolocation from 'ol/Geolocation';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
+import transform from 'ol/proj';
 
 let popupContainer = document.getElementById('popup');
 let popupContent = document.getElementById('popup-content');
@@ -25,12 +26,6 @@ let overlay = new Overlay({
 });
 
 let basemapLayer = new TileLayer({
-  source: new OSM({
-    url : "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
-  })
-})
-
-let overviewLayer = new TileLayer({
   source: new OSM({
     url : "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
   })
@@ -84,14 +79,6 @@ let earthquakeLayer = new VectorLayer({
   style: earthquakeStyleFunction
 })
 
-let overviewMapControl = new OverviewMap({
-  className: 'ol-overviewmap ol-custom-overviewmap',
-  layers: [
-    overviewLayer
-  ],
-  collapsed: false,
-});
-
 let zoomToExtentControl = new ZoomToExtent({
   extent: [
     -15000000,
@@ -127,7 +114,6 @@ const map = new Map({
     zoom: 0,
   }),
   controls: defaultControls().extend([
-    overviewMapControl,
     zoomToExtentControl,
     scaleControl()
   ])
@@ -135,7 +121,7 @@ const map = new Map({
 
 let selected = null;
 
-map.on('pointermove', function(e) {
+map.on('click', function(e) {
   let coordinate = e.coordinate;
   if (selected) {
     selected = null;
@@ -152,8 +138,8 @@ map.on('pointermove', function(e) {
                                '<tr><td>Depth:</td><td>' + selected.get('depth') + '</td></tr></table>'
     } else {
       //let closestEartquake = vectorSource.getClosestFeatureToCoordinate(coordinate);
-      popupContent.innerHTML = '<table><tr><td>Lon:</td><td>' + '' + '</td></tr>' +
-                               '<tr><td>Lat:</td><td>' + '' + '</td></tr>' +
+      popupContent.innerHTML = '<table><tr><td>Lon:</td><td>' + geolocation.getPosition()[0] + '</td></tr>' +
+                               '<tr><td>Lat:</td><td>' + geolocation.getPosition()[1] + '</td></tr>' +
                                '<tr><td>Closest earthquake:</td><td>' + '' + '</td></tr></table>'
     }
   } else {
@@ -196,7 +182,7 @@ geolocation.on('change:position', function () {
   positionFeature.setGeometry(coordinates ? new Point(coordinates) : null);
 });
 
-new VectorLayer({
+positionLayer = new VectorLayer({
   map: map,
   source: new VectorSource({
     features: [
