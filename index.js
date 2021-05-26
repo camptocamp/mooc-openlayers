@@ -141,7 +141,6 @@ let selected = null;
 map.on('pointermove', function(e) {
   let coordinate = e.coordinate;
   if (selected) {
-    selected.setStyle(undefined);
     selected = null;
   }
   map.forEachFeatureAtPixel(e.pixel, function(f) {
@@ -150,9 +149,16 @@ map.on('pointermove', function(e) {
   });
   if (selected) {
     overlay.setPosition(coordinate);
-    popupContent.innerHTML = '<table><tr><td>Magnitude:</td><td>' + selected.get('mag') + '</td></tr>' +
-                             '<tr><td>Location:</td><td>' + selected.get('place') + '</td></tr>' +
-                             '<tr><td>Depth:</td><td>' + selected.get('depth') + '</td></tr></table>'
+    if (typeof selected.get('mag') !== 'undefined') {
+      popupContent.innerHTML = '<table><tr><td>Magnitude:</td><td>' + selected.get('mag') + '</td></tr>' +
+                               '<tr><td>Location:</td><td>' + selected.get('place') + '</td></tr>' +
+                               '<tr><td>Depth:</td><td>' + selected.get('depth') + '</td></tr></table>'
+    } else {
+      //let closestEartquake = vectorSource.getClosestFeatureToCoordinate(coordinate);
+      popupContent.innerHTML = '<table><tr><td>Lon:</td><td>' + '' + '</td></tr>' +
+                               '<tr><td>Lat:</td><td>' + '' + '</td></tr>' +
+                               '<tr><td>Closest earthquake:</td><td>' + '' + '</td></tr></table>'
+    }
   } else {
     // Do not show popup content
     overlay.setPosition(undefined);
