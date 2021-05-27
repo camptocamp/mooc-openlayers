@@ -122,9 +122,8 @@ const map = new Map({
 let selected = null;
 
 map.on('click', function(e) {
-  let coordinate = e.coordinate;
-  let lon = transform(geolocation.getPosition(), 'EPSG:3857', 'EPSG:4326')[0];
-  let lat = transform(geolocation.getPosition(), 'EPSG:3857', 'EPSG:4326')[1];
+  let click_coordinate = e.coordinate;
+  let gps_coordinate = transform(geolocation.getPosition(), 'EPSG:3857', 'EPSG:4326');
   if (selected) {
     selected = null;
   }
@@ -133,16 +132,15 @@ map.on('click', function(e) {
     return true;
   });
   if (selected) {
-    overlay.setPosition(coordinate);
+    overlay.setPosition(click_coordinate);
     if (typeof selected.get('mag') !== 'undefined') {
       // Show earthquake info
       popupContent.innerHTML = '<table><tr><td>Magnitude:</td><td>' + selected.get('mag') + '</td></tr>' +
-                               '<tr><td>Location:</td><td>' + selected.get('place') + '</td></tr>' +
-                               '<tr><td>Depth:</td><td>' + selected.get('depth') + '</td></tr></table>'
+                               '<tr><td>Location:</td><td>' + selected.get('place') + '</td></tr></table>'
     } else {
       // Show geolocation info
-      popupContent.innerHTML = '<table><tr><td>Lon:</td><td>' + lon + '</td></tr>' +
-                               '<tr><td>Lat:</td><td>' + lat + '</td></tr></table>'
+      popupContent.innerHTML = '<table><tr><td>Lon:</td><td>' + gps_coordinate[0] + '</td></tr>' +
+                               '<tr><td>Lat:</td><td>' + gps_coordinate[1] + '</td></tr></table>'
     }
   } else {
     // Do not show popup content
