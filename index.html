@@ -6,8 +6,7 @@
     <style>
       html, body, #map {
         margin: 0;
-        margin-right: 150px;
-        width: 95%;
+        width: 100%;
         height: 100%;
       }
       .map .ol-custom-overviewmap,
@@ -17,20 +16,27 @@
         right: 0;
         top: 0;
       }
-      .sidebar {
-        margin: 0;
-        padding: 0;
-        width: 200px;
-        background-color: #FFFFFF;
-        position: fixed;
+      .split {
         height: 100%;
-        overflow: auto;
+        position: fixed;
+        overflow-x: hidden;
+      }
+      .left {
+        width: 85%;
+        left: 0;
+      }
+      .right {
+        width: 15%;
+        right: 0;
       }
     </style>
   </head>
   <body>
-    <div id="map" class="map"></div>
-    <div id="info" class="sidebar">
+    <div class="split left">
+      <div id="map" class="map"></div>
+    </div>
+    <div class="split right">
+      <h4>Legend</h4>
       <img src="https://sedac.ciesin.columbia.edu/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=ndh:ndh-earthquake-frequency-distribution"></img>
     </div>
     <script src="./index.js"></script>
