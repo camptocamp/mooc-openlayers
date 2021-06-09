@@ -115,18 +115,21 @@ const map = new Map({
   ])
 })
 
-let canvas = document.getElementById("eqcanvas");
-let ctx = canvas.getContext("2d");
-ctx.globalAlpha = 0.5;
-ctx.arc(10, 10, 10, 0, Math.PI * 2, false);
-ctx.fillStyle = "#000000";
-ctx.fill()
-ctx.globalAlpha = 1.0;
-ctx.font = "11px Arial";
-ctx.strokeStyle = "#FFFFFF";
-ctx.lineWidth = 2;
-ctx.strokeText("4.2", 2, 14);
-ctx.fillStyle = '#000000';
-ctx.fillText("4.2", 2, 14);
-ctx.font = "14px Arial";
-ctx.fillText("Magnitude", 25, 15);
+function drawEarthquarterLegend() {
+  let canvas = document.getElementById("eqcanvas");
+  let ctx = canvas.getContext("2d");
+  ctx.globalAlpha = 0.5;
+  ctx.arc(10, 10, 10, 0, Math.PI * 2, false);
+  ctx.fillStyle = "#000000";
+  ctx.fill()
+  ctx.globalAlpha = 1.0;
+  ctx.font = "11px Arial";
+  ctx.strokeStyle = "#FFFFFF";
+  ctx.lineWidth = 2;
+  ctx.strokeText("4.2", 2, 14);
+  ctx.fillStyle = '#000000';
+  ctx.fillText("4.2", 2, 14);
+  ctx.font = "14px Arial";
+  ctx.fillText("Magnitude", 25, 15);
+}
+drawEarthquarterLegend()
