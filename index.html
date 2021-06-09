@@ -9,6 +9,9 @@
         width: 100%;
         height: 100%;
       }
+      * {
+        font-family: Arial, Helvetica, sans-serif;
+      }
       .map .ol-custom-overviewmap,
       .map .ol-custom-overviewmap.ol-uncollapsible {
         bottom: auto;
@@ -39,12 +42,13 @@
       <h4>Legend</h4>
       Current earthquake event<br>
       <small>Earthquake events detected in the last 24h</small><br>
+      <canvas id="eqcanvas" width="150" height="25">
+        Your browser does not support the HTML5 canvas tag.
+      </canvas>
       <br><br>
       Earthquake frequency<br>
       <small>Earthquake events exceeding 4.5 on the Richter scale during the time period 1976-2002</small><br>
       <img src="https://sedac.ciesin.columbia.edu/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=ndh:ndh-earthquake-frequency-distribution"></img>
-      <br><br>
-      <h4>Layers</h4>
     </div>
     <script src="./index.js"></script>
   </body>

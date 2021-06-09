@@ -74,7 +74,7 @@ let overviewMapControl = new OverviewMap({
   layers: [
     overviewLayer
   ],
-  collapsed: false,
+  collapsed: true,
 });
 
 let zoomToExtentControl = new ZoomToExtent({
@@ -108,9 +108,25 @@ const map = new Map({
     center: [0, 0],
     zoom: 0,
   }),
-  controls: defaultControls().extend([
+  controls: defaultControls({ attributionOptions: { collapsible: true }}).extend([
     overviewMapControl,
     zoomToExtentControl,
     scaleControl()
   ])
 })
+
+let canvas = document.getElementById("eqcanvas");
+let ctx = canvas.getContext("2d");
+ctx.globalAlpha = 0.5;
+ctx.arc(10, 10, 10, 0, Math.PI * 2, false);
+ctx.fillStyle = "#000000";
+ctx.fill()
+ctx.globalAlpha = 1.0;
+ctx.font = "11px Arial";
+ctx.strokeStyle = "#FFFFFF";
+ctx.lineWidth = 2;
+ctx.strokeText("4.2", 2, 14);
+ctx.fillStyle = '#000000';
+ctx.fillText("4.2", 2, 14);
+ctx.font = "14px Arial";
+ctx.fillText("Magnitude", 25, 15);
