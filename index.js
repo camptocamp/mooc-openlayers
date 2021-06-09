@@ -40,7 +40,7 @@ let overviewMapControl = new OverviewMap({
   layers: [
     overviewLayer
   ],
-  collapsed: false,
+  collapsed: true,
 });
 
 let zoomToExtentControl = new ZoomToExtent({
