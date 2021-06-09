@@ -121,7 +121,7 @@ const map = new Map({
 
 let selected = null;
 
-map.on('click', function(e) {
+map.on('pointermove', function(e) {
   let click_coordinate = e.coordinate;
   let gps_coordinate = transform(geolocation.getPosition(), 'EPSG:3857', 'EPSG:4326');
   if (selected) {
