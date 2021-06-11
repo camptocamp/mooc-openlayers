@@ -12,12 +12,24 @@ import Overlay from 'ol/Overlay';
 import proj4 from 'proj4';
 import {register} from 'ol/proj/proj4';
 import {get as getProjection} from 'ol/proj';
+import Projection from 'ol/proj/Projection';
 
-proj4.defs('EPSG:4087',
-  '+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +units=m');
+proj4.defs(
+  'ESRI:53009',
+  '+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=6371000 +b=6371000 +units=m +no_defs'
+);
 register(proj4);
-const myProjection = getProjection('EPSG:4087');
 
+var myProjection = new Projection({
+  code: 'ESRI:53009',
+  extent: [
+    -18019909.21177587,
+    -9009954.605703328,
+    18019909.21177587,
+    9009954.605703328
+  ],
+  worldExtent: [-179, -89.99, 179, 89.99],
+});
 
 let popupContainer = document.getElementById('popup');
 let popupContent = document.getElementById('popup-content');
