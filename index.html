@@ -9,10 +9,17 @@
         width: 100%;
         height: 100%;
       }
+      .map .ol-custom-overviewmap,
+      .map .ol-custom-overviewmap.ol-uncollapsible {
+        bottom: auto;
+        left: auto;
+        right: 0;
+        top: 0;
+      }
     </style>
   </head>
   <body>
-    <div id="map"></div>
+    <div id="map" class="map"></div>
     <script src="./index.js"></script>
   </body>
 </html>
